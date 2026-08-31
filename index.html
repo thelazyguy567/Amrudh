@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutomataLearn — Interactive Theory of Computation</title>
+  <meta name="description" content="Master Finite Automata, DFA/NFA conversions, Pumping Lemma, and ace your TOC exams with interactive visualizations and practice questions." />
+  <meta property="og:title" content="AutomataLearn — Interactive Theory of Computation" />
+  <meta property="og:description" content="Interactive learning platform for Automata Theory, DFA, NFA, Pumping Lemma, and practice problems." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="bg-canvas"></div>
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo" onclick="navigate('home')">
+        <span class="logo-icon">⟨A⟩</span>
+        <span class="logo-text">AutomataLearn</span>
+      </a>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home" onclick="navigate('home')" data-page="home">Home</a></li>
+        <li><a href="#dfa-nfa" onclick="navigate('dfa-nfa')" data-page="dfa-nfa">DFA &amp; NFA</a></li>
+        <li><a href="#conversion" onclick="navigate('conversion')" data-page="conversion">Conversion</a></li>
+        <li><a href="#pumping" onclick="navigate('pumping')" data-page="pumping">Pumping Lemma</a></li>
+        <li><a href="#practice" onclick="navigate('practice')" data-page="practice">Practice</a></li>
+        <li class="nav-score" id="nav-score" style="display:none">
+          <span class="score-badge" id="score-badge">0/0</span>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="app"></main>
+
+  <footer id="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⟨A⟩</span>
+        <span>AutomataLearn</span>
+      </div>
+      <p class="footer-tagline">Theory of Computation · Interactive Learning Platform</p>
+      <div class="footer-links">
+        <a href="#home" onclick="navigate('home')">Home</a>
+        <a href="#dfa-nfa" onclick="navigate('dfa-nfa')">DFA &amp; NFA</a>
+        <a href="#conversion" onclick="navigate('conversion')">Conversion</a>
+        <a href="#pumping" onclick="navigate('pumping')">Pumping Lemma</a>
+        <a href="#practice" onclick="navigate('practice')">Practice</a>
+      </div>
+      <p class="footer-copy">Built for learning · TOC / Automata &amp; Formal Languages</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
