@@ -669,18 +669,19 @@ practice: () => `
     <div class="topic-header-text">
       <div class="topic-label">Module 05</div>
       <h1>Practice &amp; <span>Challenges</span></h1>
-      <p>Scored MCQs across all topics plus interactive construction challenges with real-time test verification.</p>
+      <p>Test your understanding with 50 scored MCQs across Regular Expressions &amp; Grammar, DFA, NFA, Conversion, and Pumping Lemma.</p>
     </div>
     <div class="topic-badges">
-      <span class="badge badge-warning">MCQs &amp; Challenges</span>
-      <span class="badge badge-primary">Scored</span>
+      <span class="badge badge-warning">50 QUESTIONS</span>
+      <span class="badge badge-primary">SCORED</span>
+      <span class="badge badge-accent">EXPLANATIONS</span>
     </div>
   </div>
 </div>
 
 <div class="topic-content">
   <div class="tab-bar" id="practice-tabs">
-    <button class="tab-btn active" onclick="switchTab('practice-tabs','quiz-pane',this)">📝 MCQ Quiz (20 Qs)</button>
+    <button class="tab-btn active" onclick="switchTab('practice-tabs','quiz-pane',this)">📝 MCQ Quiz (50 Qs)</button>
     <button class="tab-btn" onclick="switchTab('practice-tabs','challenge-pane',this)">🎯 Interactive Construction Challenges</button>
   </div>
 
@@ -691,16 +692,22 @@ practice: () => `
         <div class="card card-pad-lg text-center" style="margin-bottom:20px">
           <div style="font-size:3rem;margin-bottom:12px">📝</div>
           <h2 style="font-family:var(--font-sans);font-size:1.5rem;font-weight:800;margin-bottom:10px">Ready to Test Your Knowledge?</h2>
-          <p style="color:var(--text-secondary);margin-bottom:24px">${QUESTIONS.length} MCQs · Instant feedback · Detailed explanations · Track your score</p>
+          <p style="color:var(--text-secondary);margin-bottom:24px">50 MCQs · 10 per topic · Instant feedback · Detailed explanations · Track your score</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:24px" id="cat-btns">
-            <button class="btn btn-outline btn-sm active-cat" onclick="setCat('all',this)">All Topics</button>
-            <button class="btn btn-outline btn-sm" onclick="setCat('Grammar',this)">Grammar</button>
+            <button class="btn btn-outline btn-sm active-cat" onclick="setCat('all',this)">All 5 Topics (50 Qs)</button>
+            <button class="btn btn-outline btn-sm" onclick="setCat('Grammar',this)">Regex &amp; Grammar</button>
             <button class="btn btn-outline btn-sm" onclick="setCat('DFA',this)">DFA</button>
             <button class="btn btn-outline btn-sm" onclick="setCat('NFA',this)">NFA</button>
             <button class="btn btn-outline btn-sm" onclick="setCat('Conversion',this)">Conversion</button>
             <button class="btn btn-outline btn-sm" onclick="setCat('Pumping',this)">Pumping Lemma</button>
           </div>
           <button class="btn btn-primary btn-lg" onclick="startQuiz()" id="start-btn">Start Quiz →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px">
+          ${['Grammar','DFA','NFA','Conversion','Pumping'].map(c=>`<div class="card text-center card-no-hover" style="padding:16px">
+            <div style="font-size:1.5rem;font-weight:800;color:var(--primary);font-family:var(--font-sans)">10</div>
+            <div style="font-size:.78rem;color:var(--text-muted);margin-top:4px">${c==='Grammar'?'Regex & Grammar':c}</div>
+          </div>`).join('')}
         </div>
       </div>
       <div id="quiz-main" class="hidden"></div>
