@@ -23,25 +23,41 @@ let cvSimTrace = [];
 let cvStateId = 0;
 
 // ===== ROUTER =====
-window.navigate = function(page, push = true) {
-  currentPage = page;
-  if (push) history.pushState({ page }, '', '#' + page);
+window.navigate = function(page, push = true, subTab = null) {
+  let targetPage = page;
+  let targetSubTab = subTab;
+
+  if (page.includes(':')) {
+    const parts = page.split(':');
+    targetPage = parts[0];
+    targetSubTab = parts[1];
+  }
+
+  currentPage = targetPage;
+  const hash = targetSubTab ? `#${targetPage}:${targetSubTab}` : `#${targetPage}`;
+  if (push) history.pushState({ page: targetPage, subTab: targetSubTab }, '', hash);
+
   const app = document.getElementById('app');
   app.innerHTML = '';
   const el = document.createElement('div');
   el.className = 'page-enter';
-  el.innerHTML = PAGES[page] ? PAGES[page]() : PAGES.home();
+  el.innerHTML = PAGES[targetPage] ? PAGES[targetPage]() : PAGES.home();
   app.appendChild(el);
-  updateNav(page);
-  afterRender(page);
+  updateNav(targetPage);
+  afterRender(targetPage, targetSubTab);
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (!progress.visited.includes(page)) {
-    progress.visited.push(page);
+
+  if (!progress.visited.includes(targetPage)) {
+    progress.visited.push(targetPage);
     localStorage.setItem('al2_progress', JSON.stringify(progress));
   }
   closeMenu();
 };
-window.addEventListener('popstate', e => navigate((e.state && e.state.page) || 'home', false));
+
+window.addEventListener('popstate', e => {
+  const hash = location.hash.slice(1) || 'home';
+  navigate(hash, false);
+});
 
 function updateNav(page) {
   document.querySelectorAll('.nav-links a[data-page]').forEach(a =>
@@ -137,22 +153,25 @@ home: () => `
   </div>
 
   <div class="module-grid">
-    <a class="module-card" onclick="navigate('dfa-nfa')" href="#dfa-nfa">
+    <a class="module-card" onclick="navigate('dfa-nfa'); return false;" href="#dfa-nfa">
       <div class="module-icon icon-purple">🤖</div>
       <h3>Finite Automata</h3>
       <p>DFA &amp; NFA — formal definitions, transition tables, state diagrams + live canvas builder</p>
+      <div style="margin-top:10px">
+        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); navigate('dfa-nfa:canvas-tab'); return false;">🎨 Open Canvas Builder</button>
+      </div>
     </a>
-    <a class="module-card" onclick="navigate('conversion')" href="#conversion">
+    <a class="module-card" onclick="navigate('conversion'); return false;" href="#conversion">
       <div class="module-icon icon-sky">🔄</div>
       <h3>NFA → DFA Conversion</h3>
       <p>Subset construction algorithm guided step-by-step with ε-closure worked examples</p>
     </a>
-    <a class="module-card" onclick="navigate('pumping')" href="#pumping">
+    <a class="module-card" onclick="navigate('pumping'); return false;" href="#pumping">
       <div class="module-icon icon-green">🧪</div>
       <h3>Pumping Lemma</h3>
       <p>Prove non-regularity with interactive proof generator and string decomposer</p>
     </a>
-    <a class="module-card" onclick="navigate('practice')" href="#practice">
+    <a class="module-card" onclick="navigate('practice'); return false;" href="#practice">
       <div class="module-icon icon-amber">📝</div>
       <h3>Practice Questions</h3>
       <p>20 scored MCQs with instant feedback, category filter, and answer review</p>
@@ -716,10 +735,18 @@ practice: () => `
 // ====================================================
 // AFTER-RENDER HOOKS
 // ====================================================
-function afterRender(page) {
+function afterRender(page, subTab = null) {
   if (page === 'conversion') setTimeout(initConvStepper, 50);
   if (page === 'pumping')    setTimeout(() => { pumpSlider(2); }, 50);
-  if (page === 'dfa-nfa')    setTimeout(initCanvas, 80);
+  if (page === 'dfa-nfa') {
+    setTimeout(() => {
+      initCanvas();
+      if (subTab) {
+        const btn = document.querySelector(`.tab-btn[onclick*="${subTab}"]`);
+        if (btn) btn.click();
+      }
+    }, 80);
+  }
 }
 
 // ====================================================
