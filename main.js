@@ -138,8 +138,8 @@ home: () => `
   <h1>Learn Automata &amp;<br/><span class="grad">Formal Languages.</span></h1>
   <p class="hero-sub">Master Regular Grammars, DFA &amp; NFA, Subset Construction, and Pumping Lemma with an interactive canvas studio, string derivations, and verified practice challenges.</p>
   <div class="hero-cta">
-    <button class="btn btn-primary btn-xl" onclick="navigate('studio')">🎨 Open Automata Studio →</button>
-    <button class="btn btn-outline btn-xl" onclick="navigate('grammar')">Explore Regular Grammar</button>
+    <button class="btn btn-primary btn-xl" onclick="navigate('grammar')">🚀 Start Learning Journey →</button>
+    <button class="btn btn-outline btn-xl" onclick="navigate('studio')">🎨 Open Automata Studio</button>
     <button class="btn btn-ghost btn-xl" onclick="navigate('practice')">Take Quiz &amp; Challenges</button>
   </div>
 
@@ -399,6 +399,10 @@ studio: () => `
       <h4>Canvas Controls Guide</h4>
       <p><strong>+ State</strong>: click canvas to place state &nbsp;·&nbsp; <strong>▶ Set Start</strong>: click state &nbsp;·&nbsp; <strong>◉ Accept</strong>: click to toggle double-circle &nbsp;·&nbsp; <strong>→ Transition</strong>: click source state then target state, then enter symbol(s) &nbsp;·&nbsp; <strong>Simulate</strong>: type string and click Run.</p>
     </div>
+  </div>
+
+  <div class="text-center mt-48">
+    <button class="btn btn-primary" onclick="navigate('dfa-nfa')">Next: DFA &amp; NFA Theory →</button>
   </div>
 </div>`,
 
