@@ -203,35 +203,46 @@ home: () => `
 </div>`,
 
 // ----------------------------------------------------
-// REGULAR GRAMMAR MODULE (NEW)
+// REGULAR EXPRESSIONS & REGULAR GRAMMAR MODULE
 // ----------------------------------------------------
 grammar: () => `
 <div class="topic-header" style="background:linear-gradient(135deg,#fef3c7 0%,var(--primary-bg) 100%)">
   <div class="topic-header-inner">
     <div class="topic-header-text">
       <div class="topic-label">Module 01</div>
-      <h1>Regular <span>Grammar</span></h1>
-      <p>Formal grammar definitions, Right-Linear vs Left-Linear rules, derivation trees, and automatic conversion between Regular Grammar ↔ DFA/NFA.</p>
+      <h1>Regular Expressions &amp; <span>Grammar</span></h1>
+      <p>Formal definitions of Regular Expressions (RE) and Type-3 Regular Grammars, operators (+, ·, *), Arden's Lemma, and production rules (Right-Linear &amp; Left-Linear).</p>
     </div>
     <div class="topic-badges">
-      <span class="badge badge-warning">Chomsky Type-3</span>
-      <span class="badge badge-primary">Derivation Generator</span>
-      <span class="badge badge-accent">Interactive</span>
+      <span class="badge badge-warning">Regular Expressions</span>
+      <span class="badge badge-primary">Chomsky Type-3</span>
+      <span class="badge badge-accent">Arden's Lemma</span>
     </div>
   </div>
 </div>
 
 <div class="topic-content">
-  <h2 class="content-h2"><span class="h2-num">1</span>What is a Regular Grammar?</h2>
-  <p class="content-p">In formal language theory (Chomsky Hierarchy), a <strong>Regular Grammar</strong> (Type-3 Grammar) is a formal grammar that generates a <em>Regular Language</em>. It is defined as a 4-tuple:</p>
+  <h2 class="content-h2"><span class="h2-num">1</span>What is a Regular Expression &amp; Regular Grammar?</h2>
+  <p class="content-p">A <strong>Regular Expression (RE)</strong> is an algebraic notation used to specify a <em>Regular Language</em> over an alphabet Σ. A <strong>Regular Grammar</strong> (Type-3 Grammar) is a set of production rules that generates the exact same class of languages.</p>
   
-  <div class="formula-block" data-label="Formal Definition">
-G = (V, Σ, R, S)
-<span class="formula-cmt">where:</span>
-  V → finite set of Non-Terminal variables (e.g. {S, A, B})
-  Σ → finite set of Terminal symbols (alphabet, e.g. {0, 1} or {a, b})
-  R → set of Production Rules
-  S → Start symbol (S ∈ V)</div>
+  <div class="compare-grid mt-16">
+    <div class="compare-card left">
+      <h3>✨ Regular Expression Operators</h3>
+      <div class="formula-block" data-label="RE Notation">
+1. Union (+ or |)       : L(r₁ + r₂) = L(r₁) ∪ L(r₂)
+2. Concatenation (·)     : L(r₁ · r₂) = L(r₁) · L(r₂)
+3. Kleene Star (*)      : L(r*) = (L(r))*  <span class="formula-cmt">(0 or more repeats)</span>
+4. Base Elements       : ∅ (empty set), ε (empty string), a ∈ Σ</div>
+    </div>
+    <div class="compare-card right">
+      <h3>📜 4-Tuple Grammar Formalism</h3>
+      <div class="formula-block" data-label="Grammar G = (V, Σ, R, S)">
+V → Non-Terminal variables  (e.g. {S, A, B})
+Σ → Terminal alphabet       (e.g. {0, 1} or {a, b})
+R → Production Rules       (e.g. S → aS | b)
+S → Start Symbol           (S ∈ V)</div>
+    </div>
+  </div>
 
   <div class="compare-grid mt-24">
     <div class="compare-card left">
@@ -1108,17 +1119,68 @@ window.pumpSlider = function(yLen) {
 };
 
 // ====================================================
-// QUIZ ENGINE
+// QUIZ ENGINE (50 QUESTIONS: 10 PER TOPIC)
 // ====================================================
 const QUESTIONS = [
-  { cat:'Grammar', q:'A Regular Grammar G = (V, Σ, R, S) belongs to which level of the Chomsky Hierarchy?', opts:['Type-0 (Unrestricted)','Type-1 (Context-Sensitive)','Type-2 (Context-Free)','Type-3 (Regular)'], ans:3, exp:'Regular Grammars are Type-3 in the Chomsky Hierarchy, equivalent to Finite Automata.' },
+  // --- TOPIC 1: REGULAR EXPRESSIONS & GRAMMAR (10 Qs) ---
+  { cat:'Grammar', q:'Which operator in Regular Expressions represents the Kleene Star (zero or more repetitions)?', opts:['+','*','?','|'], ans:1, exp:'The Kleene Star (*) represents 0 or more repetitions of a symbol or group (e.g. a* = {ε, a, aa, aaa,...}).' },
+  { cat:'Grammar', q:'A Regular Grammar G = (V, Σ, R, S) belongs to which level of the Chomsky Hierarchy?', opts:['Type-0 (Unrestricted)','Type-1 (Context-Sensitive)','Type-2 (Context-Free)','Type-3 (Regular)'], ans:3, exp:'Regular Grammars are Type-3 in the Chomsky Hierarchy, equivalent to Regular Expressions and Finite Automata.' },
   { cat:'Grammar', q:'In a Right-Linear Regular Grammar, production rules must have which form?', opts:['A → wB or A → w','A → Bw or A → w','A → BC or A → a','A → αBβ'], ans:0, exp:'Right-linear rules have terminal strings followed by at most one Non-Terminal on the right: A → wB or A → w.' },
+  { cat:'Grammar', q:'Which Regular Expression matches all binary strings ending with "101"?', opts:['(0|1)*101','(101)*','0*101*','(01)*101'], ans:0, exp:'(0|1)* matches any sequence of 0s and 1s, followed by the exact suffix 101.' },
+  { cat:'Grammar', q:'According to Arden\'s Lemma, if R = Q + RP (where ε ∉ P), then the unique solution for R is:', opts:['R = QP*','R = P*Q','R = Q + P*','R = (Q+P)*'], ans:0, exp:'Arden\'s Lemma states that R = Q + RP has a unique solution R = QP* provided P does not contain the empty string ε.' },
+  { cat:'Grammar', q:'What is the language denoted by the Regular Expression (a+b)* ?', opts:['Set of all strings over {a,b} including ε','Only strings of even length','Only strings starting with a','Empty set ∅'], ans:0, exp:'(a+b)* or (a|b)* generates every possible string of any length over alphabet {a,b}, including empty string ε.' },
+  { cat:'Grammar', q:'Which of the following Regular Expression identity is INCORRECT?', opts:['(r*)* = r*','r + r = r','r · ε = r','r · ∅ = r'], ans:3, exp:'r · ∅ = ∅ (concatenating anything with the empty language yields the empty language ∅, NOT r).' },
+  { cat:'Grammar', q:'The Regular Expression a*b + a*c is equivalent to:', opts:['a*(b + c)','(a + b)*c','a*bc','(ab)*c'], ans:0, exp:'By distributivity of concatenation over union: a*b + a*c = a*(b + c).' },
+  { cat:'Grammar', q:'Which language is generated by the Right-Linear Grammar: S → aS | b ?', opts:['L(a*b) — zero or more a\'s followed by a single b','L(ab*)','L((ab)*)','L(a+b)'], ans:0, exp:'S → aS generates a...a, and S → b terminates it with a single b, yielding a*b.' },
+  { cat:'Grammar', q:'What does the Regular Expression ∅* evaluate to?', opts:['{ε} (the set containing empty string)','∅ (empty set)','Undefined','Σ*'], ans:0, exp:'By definition, the Kleene star of empty set ∅* = {ε} (zero repetitions of nothing is the empty string ε).' },
+
+  // --- TOPIC 2: DFA (10 Qs) ---
   { cat:'DFA', q:'The DFA transition function δ maps:', opts:['Q × Σ → Q','Q × Σ → 𝒫(Q)','Q × (Σ∪{ε}) → Q','Σ × Q → Q'], ans:0, exp:'DFA δ: Q × Σ → Q — exactly one next state. NFA uses 𝒫(Q) (power set).' },
   { cat:'DFA', q:'Which string is accepted by the DFA that accepts all {0,1}-strings ending in "11"?', opts:['0110','10111','101','11010'], ans:1, exp:'"10111" ends in "11" → accepted.' },
-  { cat:'NFA', q:'The key difference between NFA and DFA transition functions:', opts:['NFA returns a SET of states; DFA returns exactly one state','NFA uses only ε-transitions','DFA can return ∅; NFA cannot','They are identical'], ans:0, exp:'NFA: δ: Q×(Σ∪{ε})→𝒫(Q) returns a subset. DFA: δ: Q×Σ→Q returns exactly one state.' },
+  { cat:'DFA', q:'Minimum states for DFA accepting all non-empty strings over {a}:', opts:['1','2','3','n'], ans:1, exp:'2 states: q₀ (start, reject) → q₁ (accept, self-loop on a). δ(q₀,a)=q₁, δ(q₁,a)=q₁.' },
+  { cat:'DFA', q:'L = {w ∈ {a,b}* | w starts with "ab"} — minimal DFA state count:', opts:['2','3','4','5'], ans:2, exp:'States: q₀(start), q₁(seen a), q₂(seen ab — accept), qd(dead). Total = 4.' },
+  { cat:'DFA', q:'A DFA is "complete" when:', opts:['F = Q','δ is defined for every (state,symbol) pair','It has no dead states','|Q| = |Σ|'], ans:1, exp:'A complete DFA has δ total — defined for every (q,a) ∈ Q×Σ.' },
+  { cat:'DFA', q:'A trap/dead state in a DFA is a state from which:', opts:['No accept state can ever be reached','All transitions lead to the start state','Every string is accepted','There are no outgoing transitions'], ans:0, exp:'A trap/dead state is non-accepting, and all outgoing transitions loop back to itself, so no accept state can ever be reached.' },
+  { cat:'DFA', q:'In a DFA, what happens if an input string ends while the automaton is in an accept state?', opts:['The string is ACCEPTED','The string is REJECTED','The machine loops infinitely','An error is thrown'], ans:0, exp:'A string is accepted by a DFA if and only if processing the entire string leaves the machine in a state belonging to F.' },
+  { cat:'DFA', q:'How many accept states can a DFA have?', opts:['At least one, but no more than 2','Exactly one','Any number from 0 up to |Q|','Must equal |Q|'], ans:2, exp:'F ⊆ Q, so a DFA can have 0 accept states (accepts ∅), 1, or any number up to all |Q| states.' },
+  { cat:'DFA', q:'What is the language accepted by a DFA where F = Q (all states are accept states)?', opts:['Σ* (all possible strings over the alphabet)','∅ (empty set)','Only the empty string {ε}','Infinite strings only'], ans:0, exp:'If every state in Q is an accept state, every string ends in an accept state, so the language accepted is Σ*.' },
+  { cat:'DFA', q:'What is the minimal number of states for a DFA accepting the language L = {ε} over Σ = {a,b}?', opts:['1','2','3','4'], ans:1, exp:'2 states: q₀ (start & accept) → on input a or b move to qd (dead state). Total = 2 states.' },
+
+  // --- TOPIC 3: NFA (10 Qs) ---
+  { cat:'NFA', q:'The key difference between NFA and DFA transition functions:', opts:['NFA returns a SET of states; DFA returns exactly one state','NFA uses only ε-transitions','DFA can return ∅; NFA cannot','They are identical'], ans:0, exp:'NFA: δ: Q×(Σ∪{ε})→𝒫(Q) returns a subset of Q. DFA: δ: Q×Σ→Q returns a single state.' },
   { cat:'NFA', q:'An NFA accepts string w if:', opts:['ALL paths end in an accept state','AT LEAST ONE path ends in an accept state','The DFA equivalent accepts w','The last character leads to F'], ans:1, exp:'NFA acceptance is existential — at least one path must reach an accept state.' },
+  { cat:'NFA', q:'ε-closure({q}) always includes:', opts:['Only states reachable by exactly one ε-transition','All states reachable by ε-transitions, including q itself','The entire state set Q','Only states with outgoing ε-transitions'], ans:1, exp:'ε-closure includes q itself (zero ε-transitions is valid) plus all states reachable via ε-arrows.' },
+  { cat:'NFA', q:'An NFA with n states may produce a DFA with at most how many states?', opts:['n','n²','2ⁿ','n!'], ans:2, exp:'Subset Construction can produce 2ⁿ DFA states (one per subset of Q).' },
+  { cat:'NFA', q:'Which of the following allows ε-transitions?', opts:['DFA only','NFA only','Both DFA and NFA','Neither'], ans:1, exp:'Only NFAs allow ε-transitions (moves without consuming input).' },
+  { cat:'NFA', q:'If δ(q, a) = ∅ in an NFA, what happens to that computation branch?', opts:['The branch dies / rejects','The machine crashes','It moves to start state','It accepts immediately'], ans:0, exp:'When δ(q,a) = ∅, there is no transition for symbol a, so that specific parallel computation path terminates (dies).' },
+  { cat:'NFA', q:'How many start states can a standard NFA have?', opts:['Exactly 1 (q₀ ∈ Q)','Multiple start states allowed','Zero start states','Equal to number of accept states'], ans:0, exp:'Standard NFA definitions specify a single start state q₀ ∈ Q.' },
+  { cat:'NFA', q:'Can an NFA recognize any language that a DFA CANNOT recognize?', opts:['No, NFAs and DFAs have equal expressive power (Regular Languages)','Yes, NFAs can recognize Context-Free Languages','Yes, NFAs can recognize Non-Regular Languages','Only if it has ε-transitions'], ans:0, exp:'Rabin-Scott theorem proves DFAs and NFAs are equivalent in power — both recognize Regular Languages.' },
+  { cat:'NFA', q:'What is the ε-closure of a state q that has NO outgoing ε-transitions?', opts:['{q} (just state q itself)','∅ (empty set)','Q (all states)','Undefined'], ans:0, exp:'By definition, q is reachable from q by 0 ε-transitions, so ε-closure(q) = {q}.' },
+  { cat:'NFA', q:'Why are NFAs often preferred over DFAs during initial system design?', opts:['NFAs are often much smaller and more intuitive to design','NFAs run faster on hardware','NFAs have fewer transitions per state','NFAs do not require an alphabet'], ans:0, exp:'NFAs allow non-deterministic choices, making state diagrams significantly smaller and easier to construct for complex patterns.' },
+
+  // --- TOPIC 4: CONVERSION (10 Qs) ---
   { cat:'Conversion', q:'In Subset Construction, a DFA state (subset S) is an accept state when:', opts:['S = F_NFA','S contains ALL NFA accept states','S ∩ F_NFA ≠ ∅','S is the start subset'], ans:2, exp:'Any subset containing at least one NFA accept state becomes a DFA accept state.' },
-  { cat:'Pumping', q:'Pumping Lemma conditions for s = xyz: which is CORRECT?', opts:['|y|≥1, |xy|≤p, ∀i≥0: xyⁱz∈L','|x|≥1, |xy|≤p, ∀i≥1: xyⁱz∈L','|y|≥1, |yz|≤p, ∀i≥0: xyⁱz∈L','|y|≥0, |xy|≤p, ∀i≥1: xyⁱz∈L'], ans:0, exp:'Three conditions: (1)|y|≥1, (2)|xy|≤p, (3)∀i≥0 xyⁱz∈L.' }
+  { cat:'Conversion', q:'The empty set ∅ in the DFA after Subset Construction is:', opts:['An accept state','A non-accepting trap state','Merged with start state','Always absent'], ans:1, exp:'∅ is a dead/trap state. ∅∩F=∅ (non-accepting). For any symbol a, MOVE(∅,a)=∅ (self-loop).' },
+  { cat:'Conversion', q:'NFA has 3 states, alphabet {a}. δ(q₀,a)={q₁}, δ(q₁,a)={q₂}, δ(q₂,a)=∅, accept={q₂}. Reachable DFA states:', opts:['3','4','5','8'], ans:1, exp:'Reachable subsets: {q₀}(start), {q₁}(on a), {q₂}(on a, accept!), ∅(on a from q₂). Total = 4.' },
+  { cat:'Conversion', q:'Which theorem guarantees NFA→DFA equivalence?', opts:['Pumping Lemma','Rabin-Scott (Subset Construction)','Myhill-Nerode Theorem','Rice\'s Theorem'], ans:1, exp:'Rabin-Scott (1959) constructively proves equivalence via Subset/Powerset Construction.' },
+  { cat:'Conversion', q:'NFA has 4 states. Maximum DFA states via Subset Construction:', opts:['4','8','12','16'], ans:3, exp:'2⁴ = 16 — one state per subset of {q₀,q₁,q₂,q₃}.' },
+  { cat:'Conversion', q:'Thompson\'s Construction algorithm is used to convert:', opts:['Regular Expression → ε-NFA','DFA → Regular Expression','Context-Free Grammar → PDA','NFA → DFA'], ans:0, exp:'Thompson\'s Construction recursively converts a Regular Expression into an equivalent ε-NFA.' },
+  { cat:'Conversion', q:'In state minimization of a DFA, two states p and q are "equivalent" if:', opts:['For every input string w, δ*(p,w) and δ*(q,w) are both accepting or both rejecting','They have identical state labels','They both have self-loops','They are both start states'], ans:0, exp:'Two states p and q are indistinguishable (equivalent) if for every string w, processing w from p or q yields the same acceptance result.' },
+  { cat:'Conversion', q:'State minimization of a DFA can be computed in O(n log n) time using which algorithm?', opts:['Hopcroft\'s Algorithm','Dijkstra\'s Algorithm','Kruskal\'s Algorithm','Warshall\'s Algorithm'], ans:0, exp:'Hopcroft\'s DFA minimization algorithm runs in O(n log n) time by partitioning states into equivalence classes.' },
+  { cat:'Conversion', q:'When converting a Regular Grammar A → aB to a Finite Automaton, state transition is:', opts:['δ(A, a) = B','δ(B, a) = A','δ(A, B) = a','δ(a, A) = B'], ans:0, exp:'A → aB means from state A, reading symbol \'a\' moves to state B.' },
+  { cat:'Conversion', q:'Can a minimized DFA for a regular language have more than one non-accepting trap state?', opts:['No, all trap states are equivalent and merge into a single trap state','Yes, up to n trap states','Yes, if the alphabet has size > 2','Only for NFAs'], ans:0, exp:'All trap states behave identically (reject all future inputs), so state minimization merges them into exactly one trap state.' },
+
+  // --- TOPIC 5: PUMPING LEMMA (10 Qs) ---
+  { cat:'Pumping', q:'Pumping Lemma conditions for s = xyz: which is CORRECT?', opts:['|y|≥1, |xy|≤p, ∀i≥0: xyⁱz∈L','|x|≥1, |xy|≤p, ∀i≥1: xyⁱz∈L','|y|≥1, |yz|≤p, ∀i≥0: xyⁱz∈L','|y|≥0, |xy|≤p, ∀i≥1: xyⁱz∈L'], ans:0, exp:'Three conditions: (1)|y|≥1, (2)|xy|≤p, (3)∀i≥0 xyⁱz∈L.' },
+  { cat:'Pumping', q:'To prove L={aⁿbⁿ} non-regular, we choose s =', opts:['aᵖ','aᵖbᵖ','aᵖ⁺¹bᵖ','aᵖ⁻¹bᵖ⁻¹'], ans:1, exp:'s=aᵖbᵖ ∈ L with |s|=2p≥p. Forces |xy|≤p → y consists only of a\'s → pumping breaks balance.' },
+  { cat:'Pumping', q:'The Pumping Lemma is used to:', opts:['Prove a language IS regular','Prove a language is NOT regular','Convert NFA to DFA','Minimize a DFA'], ans:1, exp:'Pumping Lemma is a proof by contradiction tool for non-regularity only.' },
+  { cat:'Pumping', q:'For s=aᵖbᵖ in the {aⁿbⁿ} proof, why must y consist only of a\'s?', opts:['b\'s are not in the alphabet','|xy|≤p forces xy within first p characters (all a\'s)','y must be a single character','The pumping length equals p a\'s'], ans:1, exp:'Since s=aᵖbᵖ starts with p a\'s, and |xy|≤p, both x and y are confined to those first p characters.' },
+  { cat:'Pumping', q:'Pumping s=aᵖbᵖ with y=aᵏ (k≥1), what is xy⁰z?', opts:['aᵖbᵖ','aᵖ⁺ᵏbᵖ','aᵖ⁻ᵏbᵖ','aᵖbᵖ⁺ᵏ'], ans:2, exp:'xy⁰z = xz = aᵖ⁻ᵏbᵖ. k≥1 means fewer a\'s than b\'s → ∉ L.' },
+  { cat:'Pumping', q:'The theoretical foundation behind the Pumping Lemma is:', opts:['Pigeonhole Principle','Chinese Remainder Theorem','De Morgan\'s Laws','Bayes Theorem'], ans:0, exp:'If a string of length ≥ p is processed by a DFA with p states, by Pigeonhole Principle at least one state must be visited twice.' },
+  { cat:'Pumping', q:'What does pumping with i = 0 (xy⁰z) correspond to physically?', opts:['Deleting the substring y from the string','Doubling the substring y','Reversing the string','Adding ε to the alphabet'], ans:0, exp:'i = 0 means replacing y with y⁰ = ε, which effectively removes / deletes the substring y from s.' },
+  { cat:'Pumping', q:'Is L = { w ∈ {a,b}* | count_a(w) = count_b(w) } a regular language?', opts:['No, it requires counting infinitely many symbols (fails Pumping Lemma)','Yes, it is regular','Only if |w| < 100','Yes, recognized by 2-state DFA'], ans:0, exp:'Equal counts of a\'s and b\'s requires unbounded memory to track the count, making it non-regular (Context-Free).' },
+  { cat:'Pumping', q:'Which of the following languages IS regular and passes the Pumping Lemma?', opts:['L = { aⁿbᵐ | n, m ≥ 0 }','L = { aⁿbⁿ | n ≥ 0 }','L = { aⁿ² | n ≥ 0 }','L = { ww | w ∈ {a,b}* }'], ans:0, exp:'L = {aⁿbᵐ} is generated by Regular Expression a*b*, which is regular! The others are non-regular.' },
+  { cat:'Pumping', q:'If a language L satisfies the Pumping Lemma, does that GUARANTEE that L is regular?', opts:['No, satisfying the Pumping Lemma is a necessary but NOT sufficient condition','Yes, always','Only if L is finite','Only if L has an alphabet of size 1'], ans:0, exp:'Pumping Lemma is a one-way implication: Regular → satisfies Pumping Lemma. Some non-regular languages also satisfy it, so it cannot prove regularity.' }
 ];
 
 window.setCat = function(cat, btn) {
