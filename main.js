@@ -277,25 +277,63 @@ A → ε    <span class="formula-cmt">(Empty string)</span></div>
   <!-- INTERACTIVE GRAMMAR PLAYGROUND -->
   <h2 class="content-h2"><span class="h2-num">2</span>Interactive Grammar Playground &amp; String Generator</h2>
   <div class="card card-pad-lg" style="margin-bottom:24px">
-    <h3 class="content-h3" style="margin-top:0">Choose or Custom Edit Production Rules</h3>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn btn-outline btn-sm" onclick="loadGrammarPreset('ending101')">Preset 1: Ends with "101"</button>
-      <button class="btn btn-outline btn-sm" onclick="loadGrammarPreset('even0')">Preset 2: Even 0s</button>
-      <button class="btn btn-outline btn-sm" onclick="loadGrammarPreset('ab')">Preset 3: Starts with 'a', ends with 'b'</button>
+    <!-- PLAYGROUND TABS ROW -->
+    <div class="grammar-tabs-row">
+      <button class="grammar-tab-btn active" onclick="switchGrammarPlaygroundTab('construct', this)">✨ Construct Grammar</button>
+      <button class="grammar-tab-btn" onclick="switchGrammarPlaygroundTab('presets', this)">📂 Presets</button>
+      <button class="grammar-tab-btn" onclick="switchGrammarPlaygroundTab('custom', this)">✏️ Custom Rules</button>
     </div>
 
-    <div class="formula-block" data-label="Current Production Rules (R)">
-      <textarea id="grammar-rules-input" style="width:100%;height:100px;background:none;border:none;color:inherit;font-family:inherit;font-size:inherit;outline:none;resize:vertical" spellcheck="false">S -> 0S | 1S | 1A
-A -> 0B
-B -> 1</textarea>
+    <!-- CONSTRUCT GRAMMAR TAB CONTENT -->
+    <div id="grammar-construct-box">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px">CONSTRUCT A GRAMMAR</h3>
+      <p class="content-p" style="margin-bottom:12px">Describe the language or condition in natural language:</p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <input type="text" id="grammar-prompt-input" class="sim-input" placeholder="e.g. Binary strings that start with 1 and end with 0" value="Binary strings that start with 1 and end with 0" style="flex:1;min-width:240px"/>
+        <button class="btn btn-accent" onclick="generateGrammarFromPrompt()">✨ Generate Grammar</button>
+      </div>
+
+      <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:6px">Try an example:</div>
+      <div class="grammar-example-chips">
+        <button class="grammar-chip" onclick="generateGrammarFromPrompt('Binary strings starting with 1 and ending with 0')">Starts with 1 and ends with 0</button>
+        <button class="grammar-chip" onclick="generateGrammarFromPrompt('Strings starting with a and ending with b')">Starts with a and ends with b</button>
+        <button class="grammar-chip" onclick="generateGrammarFromPrompt('Binary strings ending with 101')">Ends with 101</button>
+        <button class="grammar-chip" onclick="generateGrammarFromPrompt('Binary strings containing substring 01')">Contains substring 01</button>
+        <button class="grammar-chip" onclick="generateGrammarFromPrompt('Binary strings with an even number of 0s')">Even number of 0s</button>
+        <button class="grammar-chip" onclick="generateGrammarFromPrompt('Binary strings with an odd number of 1s')">Odd number of 1s</button>
+        <button class="grammar-chip" onclick="generateGrammarFromPrompt('Binary strings containing at least one 1')">Contains at least one 1</button>
+      </div>
+
+      <div id="grammar-construct-output"></div>
     </div>
 
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-      <button class="btn btn-primary" onclick="deriveGrammarStrings()">✨ Derive Sample Strings</button>
-      <button class="btn btn-accent" onclick="convertGrammarToDFA()">🔄 Convert Grammar to DFA Canvas</button>
+    <!-- PRESETS TAB CONTENT -->
+    <div id="grammar-presets-box" style="display:none">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">Select a Predefined Regular Grammar Preset</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn btn-outline btn-sm" onclick="loadGrammarPreset('ending101')">Preset 1: Ends with "101"</button>
+        <button class="btn btn-outline btn-sm" onclick="loadGrammarPreset('even0')">Preset 2: Even 0s</button>
+        <button class="btn btn-outline btn-sm" onclick="loadGrammarPreset('ab')">Preset 3: Starts with 'a', ends with 'b'</button>
+      </div>
     </div>
 
-    <div id="grammar-output" style="margin-top:20px"></div>
+    <!-- PRODUCTION RULES EDITOR CONTAINER (SHARED) -->
+    <div id="grammar-editor-box" class="mt-16">
+      <h3 class="content-h3" style="margin-bottom:8px">Active Production Rules (R)</h3>
+      <div class="formula-block" data-label="Production Rules">
+        <textarea id="grammar-rules-input" style="width:100%;height:100px;background:none;border:none;color:inherit;font-family:inherit;font-size:inherit;outline:none;resize:vertical" spellcheck="false">S -> 1A
+A -> 0A | 1A | 0</textarea>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn btn-outline btn-sm" onclick="enableRulesEditor()">✏️ Edit Rules</button>
+        <button class="btn btn-primary btn-sm" onclick="validateAndDeriveCurrentGrammar()">✓ Validate &amp; Derive Sample Strings</button>
+        <button class="btn btn-accent btn-sm" onclick="convertGrammarToDFA()">🔄 Convert Grammar to DFA Canvas</button>
+      </div>
+
+      <div id="grammar-output" style="margin-top:20px"></div>
+    </div>
   </div>
 
   <h2 class="content-h2"><span class="h2-num">3</span>Grammar ↔ DFA Conversion Table</h2>
@@ -736,7 +774,7 @@ function afterRender(page, subTab = null) {
   if (page === 'conversion') setTimeout(initConvStepper, 50);
   if (page === 'pumping')    setTimeout(() => { pumpSlider(2); }, 50);
   if (page === 'studio')     setTimeout(() => { initCanvas(); if (window.switchStudioMode) window.switchStudioMode(window.currentStudioMode || 'regex'); }, 80);
-  if (page === 'grammar')    setTimeout(() => loadGrammarPreset('ending101'), 50);
+  if (page === 'grammar')    setTimeout(() => { if (window.generateGrammarFromPrompt) window.generateGrammarFromPrompt('Binary strings starting with 1 and ending with 0'); }, 50);
   if (page === 'practice')   setTimeout(() => { if (window.initChallengesEngine) window.initChallengesEngine(); }, 50);
   if (subTab) {
     setTimeout(() => {
