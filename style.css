@@ -276,21 +276,23 @@ main { padding-top: 64px; min-height: calc(100vh - 64px); }
 
 /* ===== FORMULA / CODE ===== */
 .formula-block {
-  background: #f8faff; border: 1px solid var(--primary-border);
-  border-radius: var(--r-lg); padding: 20px 24px;
+  background: var(--primary-bg); border: 1px solid var(--primary-border);
+  border-radius: var(--r-lg); padding: 22px 20px 18px;
   font-family: var(--font-mono); font-size: .88rem;
-  color: var(--primary-dark); margin: 16px 0;
-  overflow-x: auto; position: relative;
-  line-height: 1.8;
+  color: var(--text-primary); margin: 24px 0 16px;
+  position: relative; line-height: 1.8;
+  white-space: pre-wrap; word-break: break-word;
+  overflow: visible;
 }
 .formula-block::before {
   content: attr(data-label);
-  position: absolute; top: -10px; left: 16px;
-  background: var(--primary-bg); padding: 0 8px;
-  font-size: .65rem; letter-spacing: .1em;
+  position: absolute; top: 0; transform: translateY(-50%); left: 16px;
+  background: var(--bg-surface); padding: 2px 10px;
+  font-size: .68rem; letter-spacing: .08em;
   color: var(--primary); font-weight: 700;
   text-transform: uppercase; border: 1px solid var(--primary-border);
-  border-radius: 4px;
+  border-radius: 4px; line-height: 1.4;
+  box-shadow: var(--shadow-xs); z-index: 2;
 }
 .formula-hl  { color: var(--primary); font-weight: 700; }
 .formula-cmt { color: var(--text-muted); font-style: italic; }
