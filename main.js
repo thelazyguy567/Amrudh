@@ -320,21 +320,24 @@ studio: () => `
 <div class="topic-header" style="background:linear-gradient(135deg,var(--accent-bg) 0%,var(--primary-bg) 100%)">
   <div class="topic-header-inner">
     <div class="topic-header-text">
-      <div class="topic-label">Standalone Module</div>
-      <h1>Automata <span>Studio &amp; Canvas</span></h1>
-      <p>Interactive state diagram editor, Regex to DFA auto-generator, real-time string path simulator, and DFA minimization engine.</p>
+      <div class="topic-label">Interactive Automata Laboratory</div>
+      <h1>Automata <span>Studio &amp; Lab</span></h1>
+      <p>Interactive state diagram builder, Regex generator, DFA/NFA/ε-NFA engines, DFA minimization, side-by-side conversions, and Pumping Lemma builder.</p>
     </div>
     <div class="topic-badges">
       <span class="badge badge-accent">Canvas Builder</span>
-      <span class="badge badge-primary">Regex Engine</span>
-      <span class="badge badge-success">DFA Minimizer</span>
+      <span class="badge badge-primary">8 Studio Modes</span>
+      <span class="badge badge-success">DFA / NFA / ε-NFA</span>
     </div>
   </div>
 </div>
 
 <div class="topic-content">
+  <!-- MODE SELECTOR -->
+  ${window.buildModeSelector ? window.buildModeSelector() : ''}
+
   <!-- REGEX GENERATOR BAR -->
-  <div class="card card-pad-lg" style="margin-bottom:24px;border-left:3px solid var(--accent)">
+  <div class="card card-pad-lg" id="regex-bar" style="margin-bottom:24px;border-left:3px solid var(--accent)">
     <h3 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px">⚡ Quick Generate from Regular Expression (Regex)</h3>
     <p class="content-p" style="margin-bottom:12px">Type a regular expression to automatically build state machine nodes on the canvas below:</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -343,6 +346,9 @@ studio: () => `
       <button class="btn btn-outline" onclick="minimizeCurrentDFA()">📉 Minimize DFA</button>
     </div>
   </div>
+
+  <!-- MODE PANELS CONTAINER -->
+  ${window.buildModePanels ? window.buildModePanels() : ''}
 
   <!-- CANVAS BUILDER CONTAINER -->
   <div class="canvas-builder" id="canvas-builder">
@@ -766,7 +772,7 @@ practice: () => `
 function afterRender(page, subTab = null) {
   if (page === 'conversion') setTimeout(initConvStepper, 50);
   if (page === 'pumping')    setTimeout(() => { pumpSlider(2); }, 50);
-  if (page === 'studio')     setTimeout(initCanvas, 80);
+  if (page === 'studio')     setTimeout(() => { initCanvas(); if (window.switchStudioMode) window.switchStudioMode(window.currentStudioMode || 'regex'); }, 80);
   if (page === 'grammar')    setTimeout(() => loadGrammarPreset('ending101'), 50);
   if (subTab) {
     setTimeout(() => {
@@ -851,7 +857,28 @@ window.buildFromRegex = function() {
   const regexStr = document.getElementById('regex-input')?.value || '(0|1)*101';
   resetCanvas();
   
-  if (regexStr.includes('101')) {
+  if (regexStr.includes('1011')) {
+    cvStates = [
+      { id: 0, x: 90,  y: 180, isAccept: false, label: 'q₀' },
+      { id: 1, x: 210, y: 180, isAccept: false, label: 'q₁' },
+      { id: 2, x: 330, y: 180, isAccept: false, label: 'q₂' },
+      { id: 3, x: 450, y: 180, isAccept: false, label: 'q₃' },
+      { id: 4, x: 570, y: 180, isAccept: true,  label: 'q₄' }
+    ];
+    cvTransitions = [
+      { from: 0, to: 0, symbol: '0' },
+      { from: 0, to: 1, symbol: '1' },
+      { from: 1, to: 1, symbol: '1' },
+      { from: 1, to: 2, symbol: '0' },
+      { from: 2, to: 0, symbol: '0' },
+      { from: 2, to: 3, symbol: '1' },
+      { from: 3, to: 2, symbol: '0' },
+      { from: 3, to: 4, symbol: '1' },
+      { from: 4, to: 1, symbol: '1' },
+      { from: 4, to: 2, symbol: '0' }
+    ];
+    cvStart = 0; cvStateId = 5;
+  } else if (regexStr.includes('101')) {
     cvStates = [
       { id: 0, x: 90,  y: 180, isAccept: false, label: 'q₀' },
       { id: 1, x: 230, y: 180, isAccept: false, label: 'q₁' },
@@ -1455,14 +1482,32 @@ function renderCanvas() {
       html += `<path d="M${from.x-16},${from.y-R} C${from.x-44},${from.y-R-60} ${from.x+44},${from.y-R-60} ${from.x+16},${from.y-R}" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#cv-arr)"/>
       <text x="${from.x}" y="${from.y-R-28}" text-anchor="middle" fill="#0ea5e9" font-family="JetBrains Mono,monospace" font-size="12">${lbl}</text>`;
     } else {
-      const dx = to.x - from.x, dy = to.y - from.y;
-      const dist = Math.hypot(dx, dy);
-      const ux = dx / dist, uy = dy / dist;
-      const x1 = from.x + ux * R, y1 = from.y + uy * R;
-      const x2 = to.x - ux * R, y2 = to.y - uy * R;
+      const revKey = `${to.id}-${from.id}`;
+      const isBi = !!edgeMap[revKey];
 
-      html += `<path d="M${x1},${y1} L${x2},${y2}" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#cv-arr)"/>
-      <text x="${(x1+x2)/2}" y="${(y1+y2)/2-8}" text-anchor="middle" fill="#0ea5e9" font-family="JetBrains Mono,monospace" font-size="12">${lbl}</text>`;
+      const dx = to.x - from.x, dy = to.y - from.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      const ux = dx / dist, uy = dy / dist;
+      const nx = -uy, ny = ux; // normal vector
+
+      if (isBi) {
+        // Curve offset for bidirectional transitions
+        const curveOffset = 30;
+        const cx = (from.x + to.x) / 2 + nx * curveOffset;
+        const cy = (from.y + to.y) / 2 + ny * curveOffset;
+
+        const x1 = from.x + ux * R, y1 = from.y + uy * R;
+        const x2 = to.x - ux * R, y2 = to.y - uy * R;
+
+        html += `<path d="M${x1},${y1} Q${cx},${cy} ${x2},${y2}" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#cv-arr)"/>
+        <text x="${cx}" y="${cy + (ny > 0 ? 14 : -6)}" text-anchor="middle" fill="#0ea5e9" font-family="JetBrains Mono,monospace" font-size="12">${lbl}</text>`;
+      } else {
+        const x1 = from.x + ux * R, y1 = from.y + uy * R;
+        const x2 = to.x - ux * R, y2 = to.y - uy * R;
+
+        html += `<path d="M${x1},${y1} L${x2},${y2}" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#cv-arr)"/>
+        <text x="${(x1+x2)/2 + nx*12}" y="${(y1+y2)/2 + ny*12 - 4}" text-anchor="middle" fill="#0ea5e9" font-family="JetBrains Mono,monospace" font-size="12">${lbl}</text>`;
+      }
     }
   });
 

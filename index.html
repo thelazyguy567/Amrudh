@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css?v=9999" />
+  <link rel="stylesheet" href="studio-styles.css?v=1" />
   <script>
     // Clear legacy cache/storage from old theme
     if (localStorage.getItem('al_progress')) {
@@ -28,6 +29,7 @@
         </div>
         <span class="logo-text">AutomataLearn</span>
       </a>
+      <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleDarkMode()" aria-label="Toggle theme" style="background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 8px;margin-left:auto;margin-right:8px">🌙</button>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
@@ -79,6 +81,9 @@
     </div>
   </footer>
 
-  <script src="main.js?v=2"></script>
+  <script src="automata-engine.js"></script>
+  <script src="studio-modes.js"></script>
+  <script src="studio-panels.js"></script>
+  <script src="main.js?v=3"></script>
 </body>
 </html>
