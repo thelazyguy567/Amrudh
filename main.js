@@ -725,44 +725,7 @@ practice: () => `
   </div>
 
   <!-- CHALLENGES PANE -->
-  <div class="tab-pane" id="challenge-pane">
-    <h2 class="content-h2" style="margin-top:0"><span class="h2-num">🎯</span>Interactive Machine Challenges</h2>
-    <p class="content-p" style="margin-bottom:20px">Type a regular expression or state transition sequence for the target language challenge below. Click "Run Test Cases" to test your solution!</p>
-
-    <!-- CHALLENGE 1 -->
-    <div class="challenge-card">
-      <div class="challenge-meta">
-        <span class="badge badge-primary">Challenge 1</span>
-        <span class="badge badge-accent">Alphabet Σ = {0, 1}</span>
-      </div>
-      <h3>Binary Strings Ending in '101'</h3>
-      <p>Provide a Regular Expression or State Machine for all binary strings that end with substring <code class="ic">101</code>.</p>
-      
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-        <input type="text" id="ch1-input" class="sim-input" placeholder="e.g. (0|1)*101" value="(0|1)*101" style="flex:1"/>
-        <button class="btn btn-success" onclick="verifyChallenge(1)">Run Test Cases</button>
-        <button class="btn btn-accent" onclick="loadChallengeInStudio('(0|1)*101')">🎨 Load in Studio</button>
-      </div>
-      <div id="ch1-result" style="font-family:var(--font-mono);font-size:.85rem"></div>
-    </div>
-
-    <!-- CHALLENGE 2 -->
-    <div class="challenge-card">
-      <div class="challenge-meta">
-        <span class="badge badge-warning">Challenge 2</span>
-        <span class="badge badge-accent">Alphabet Σ = {a, b}</span>
-      </div>
-      <h3>Strings with Even Number of 'a's</h3>
-      <p>Provide a Regular Expression or State Machine for strings containing an even count of 'a's.</p>
-      
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-        <input type="text" id="ch2-input" class="sim-input" placeholder="e.g. b*(ab*ab*)*" value="b*(ab*ab*)*" style="flex:1"/>
-        <button class="btn btn-success" onclick="verifyChallenge(2)">Run Test Cases</button>
-        <button class="btn btn-accent" onclick="loadChallengeInStudio('b*(ab*ab*)*')">🎨 Load in Studio</button>
-      </div>
-      <div id="ch2-result" style="font-family:var(--font-mono);font-size:.85rem"></div>
-    </div>
-  </div>
+  <div class="tab-pane" id="challenge-pane"></div>
 </div>`
 }; // end PAGES
 
@@ -774,6 +737,7 @@ function afterRender(page, subTab = null) {
   if (page === 'pumping')    setTimeout(() => { pumpSlider(2); }, 50);
   if (page === 'studio')     setTimeout(() => { initCanvas(); if (window.switchStudioMode) window.switchStudioMode(window.currentStudioMode || 'regex'); }, 80);
   if (page === 'grammar')    setTimeout(() => loadGrammarPreset('ending101'), 50);
+  if (page === 'practice')   setTimeout(() => { if (window.initChallengesEngine) window.initChallengesEngine(); }, 50);
   if (subTab) {
     setTimeout(() => {
       const btn = document.querySelector(`.tab-btn[onclick*="${subTab}"]`);

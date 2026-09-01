@@ -543,3 +543,265 @@ details.how-it-works ul, details.how-it-works ol {
   padding-left: 20px;
   margin: 8px 0;
 }
+
+/* ===== INTERACTIVE CHALLENGES EXTENSION ===== */
+.challenges-header-area {
+  margin-bottom: 24px;
+}
+
+.challenges-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.challenges-title-row h2 {
+  font-family: var(--font-sans);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.challenges-count-badge {
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.challenges-filter-bar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  margin-top: 16px;
+  box-shadow: var(--shadow-xs);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.filter-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.filter-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.filter-btn.active {
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-glow);
+}
+
+.filter-select {
+  padding: 6px 12px;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.filter-select:focus {
+  border-color: var(--primary);
+}
+
+.challenges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.challenge-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+
+.challenge-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.challenge-card-header {
+  margin-bottom: 12px;
+}
+
+.challenge-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.challenge-badges .topic-icon {
+  font-size: 0.95rem;
+}
+
+.challenge-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.challenge-problem-statement {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 18px;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.challenge-task-box {
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-lg);
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.challenge-task-box strong {
+  color: var(--accent);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.challenge-interactive-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.challenge-actions-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.challenge-expandable-box {
+  margin-top: 14px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.expandable-header {
+  padding: 8px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.expandable-header.hint-header {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-bottom: 1px solid var(--warning-border);
+}
+
+.expandable-header.exp-header {
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-border);
+}
+
+.expandable-header.sol-header {
+  background: var(--success-bg);
+  color: var(--success);
+  border-bottom: 1px solid var(--success-border);
+}
+
+.expandable-body {
+  padding: 16px 20px;
+  background: var(--bg-surface);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.solution-step {
+  margin-bottom: 16px;
+}
+
+.solution-step:last-child {
+  margin-bottom: 0;
+}
+
+.solution-step strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.solution-step ul, .solution-step ol {
+  padding-left: 20px;
+  margin-top: 6px;
+}
+
+.solution-step li {
+  margin-bottom: 6px;
+}
+
