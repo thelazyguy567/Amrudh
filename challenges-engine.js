@@ -228,6 +228,9 @@ window.verifyInteractiveChallenge = function(id) {
     if (passed === total) {
       resultEl.className = 'sim-result accept mt-8';
       resultEl.innerHTML = `✅ PASSED (${passed}/${total} Test Cases Passed!)<br><span style="font-size:.78rem;opacity:.9">${logs.join(' | ')}</span>`;
+      if (window.journeyEngine) {
+        window.journeyEngine.recordChallengeCompletion(c.topic, c.id);
+      }
     } else {
       resultEl.className = 'sim-result reject mt-8';
       resultEl.innerHTML = `❌ FAILED (${passed}/${total} Test Cases Passed)<br><span style="font-size:.78rem;opacity:.9">${logs.join(' | ')}</span>`;

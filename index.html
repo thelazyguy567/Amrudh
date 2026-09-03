@@ -35,6 +35,8 @@
       </button>
       <ul class="nav-links" id="nav-links">
         <li><a href="#home" onclick="event.preventDefault(); navigate('home');" data-page="home">Home</a></li>
+        <li><a href="#journey" onclick="event.preventDefault(); navigate('journey');" data-page="journey">Journey 🗺️</a></li>
+        <li><a href="#arena" onclick="event.preventDefault(); navigate('arena');" data-page="arena">Arena ⚔️</a></li>
         <li><a href="#grammar" onclick="event.preventDefault(); navigate('grammar');" data-page="grammar">Regex &amp; Grammar</a></li>
         <li><a href="#dfa-nfa" onclick="event.preventDefault(); navigate('dfa-nfa');" data-page="dfa-nfa">DFA &amp; NFA</a></li>
         <li><a href="#studio" onclick="event.preventDefault(); navigate('studio');" data-page="studio">
@@ -67,6 +69,8 @@
         </div>
         <div class="footer-links-col">
           <strong>Modules</strong>
+          <a href="#journey" onclick="navigate('journey'); return false;">Learning Journey 🗺️</a>
+          <a href="#arena" onclick="navigate('arena'); return false;">Challenge Arena ⚔️</a>
           <a href="#grammar" onclick="navigate('grammar'); return false;">Regex &amp; Grammar</a>
           <a href="#dfa-nfa" onclick="navigate('dfa-nfa'); return false;">DFA &amp; NFA</a>
           <a href="#studio" onclick="navigate('studio'); return false;">Studio Canvas</a>
@@ -87,6 +91,8 @@
   <script src="challenges-data.js"></script>
   <script src="challenges-engine.js"></script>
   <script src="grammar-engine.js"></script>
-  <script src="main.js?v=5"></script>
+  <script src="journey-engine.js"></script>
+  <script src="arena-engine.js"></script>
+  <script src="main.js?v=7"></script>
 </body>
 </html>

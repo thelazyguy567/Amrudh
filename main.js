@@ -34,7 +34,7 @@ window.navigate = function(page, push = true, subTab = null) {
     targetSubTab = parts[1];
   }
 
-  const validPages = ['home', 'grammar', 'dfa-nfa', 'studio', 'conversion', 'pumping', 'practice'];
+  const validPages = ['home', 'journey', 'arena', 'grammar', 'dfa-nfa', 'studio', 'conversion', 'pumping', 'practice'];
   if (!validPages.includes(targetPage)) targetPage = 'home';
 
   currentPage = targetPage;
@@ -130,6 +130,16 @@ function sStart(cx,cy) {
 const PAGES = {
 
 // ----------------------------------------------------
+// LEARNING JOURNEY PAGE
+// ----------------------------------------------------
+journey: () => window.journeyEngine ? window.journeyEngine.renderPage() : '<div style="padding:100px;text-align:center">Loading Journey...</div>',
+
+// ----------------------------------------------------
+// AUTOMATA CHALLENGE ARENA PAGE
+// ----------------------------------------------------
+arena: () => window.arenaEngine ? window.arenaEngine.renderPage() : '<div style="padding:100px;text-align:center">Loading Arena...</div>',
+
+// ----------------------------------------------------
 // HOME PAGE
 // ----------------------------------------------------
 home: () => `
@@ -138,9 +148,9 @@ home: () => `
   <h1>Learn Automata &amp;<br/><span class="grad">Formal Languages.</span></h1>
   <p class="hero-sub">Master Regular Grammars, DFA &amp; NFA, Subset Construction, and Pumping Lemma with an interactive canvas studio, string derivations, and verified practice challenges.</p>
   <div class="hero-cta">
-    <button class="btn btn-primary btn-xl" onclick="navigate('grammar')">🚀 Start Learning Journey →</button>
-    <button class="btn btn-outline btn-xl" onclick="navigate('studio')">🎨 Open Automata Studio</button>
-    <button class="btn btn-ghost btn-xl" onclick="navigate('practice')">Take Quiz &amp; Challenges</button>
+    <button class="btn btn-primary btn-xl" onclick="navigate('journey')">🗺️ Start Learning Journey →</button>
+    <button class="btn btn-accent btn-xl" onclick="navigate('arena')">⚔️ Challenge Arena</button>
+    <button class="btn btn-outline btn-xl" onclick="navigate('studio')">🎨 Automata Studio</button>
   </div>
 
   <div class="hero-illustration">
@@ -161,6 +171,16 @@ home: () => `
   </div>
 
   <div class="module-grid">
+    <a class="module-card featured-journey-card" onclick="navigate('journey'); return false;" href="#journey" style="grid-column:1/-1;background:linear-gradient(135deg,var(--primary-bg) 0%,var(--accent-bg) 100%);border:2px solid var(--primary-border)">
+      <div class="module-icon icon-amber">🗺️</div>
+      <h3>Your Automata Learning Journey</h3>
+      <p>Interactive 8-node visual roadmap from Regex &amp; Grammar to Mastery Challenge, with automated progress tracking and academic achievements!</p>
+    </a>
+    <a class="module-card" onclick="navigate('arena'); return false;" href="#arena">
+      <div class="module-icon icon-purple">⚔️</div>
+      <h3>Automata Challenge Arena</h3>
+      <p>Construct real DFAs, NFAs, and ε-NFAs on the interactive canvas with automated visible &amp; hidden test cases.</p>
+    </a>
     <a class="module-card" onclick="navigate('grammar'); return false;" href="#grammar">
       <div class="module-icon icon-amber">📜</div>
       <h3>Regular Grammar</h3>
@@ -782,6 +802,31 @@ function afterRender(page, subTab = null) {
       if (btn) btn.click();
     }, 100);
   }
+
+  if (page === 'arena') setTimeout(() => { if (window.arenaEngine) window.arenaEngine.updateUI(); }, 50);
+
+  // Automatic Journey Activity Recording
+  if (window.journeyEngine) {
+    if (page === 'journey') {
+      window.journeyEngine.updateUIIfOnPage();
+    } else if (page === 'arena') {
+      window.journeyEngine.recordActivity('mastery', 'concept');
+    } else if (page === 'grammar') {
+      window.journeyEngine.recordActivity('grammar', 'concept');
+    } else if (page === 'dfa-nfa') {
+      const topic = (subTab === 'nfa') ? 'nfa' : (subTab === 'enfa') ? 'enfa' : 'dfa';
+      window.journeyEngine.recordActivity(topic, 'concept');
+    } else if (page === 'conversion') {
+      window.journeyEngine.recordActivity('conversion', 'concept');
+    } else if (page === 'pumping') {
+      window.journeyEngine.recordActivity('pumping', 'concept');
+    } else if (page === 'studio') {
+      const topic = (subTab === 'minimize') ? 'minimization' : 'dfa';
+      window.journeyEngine.recordActivity(topic, 'concept');
+    } else if (page === 'practice') {
+      window.journeyEngine.recordActivity('mastery', 'concept');
+    }
+  }
 }
 
 // ====================================================
@@ -816,6 +861,12 @@ window.deriveGrammarStrings = function() {
       </div>
     </div>
   `;
+
+  if (window.journeyEngine) {
+    window.journeyEngine.recordActivity('grammar', 'builder');
+    window.journeyEngine.recordActivity('grammar', 'test');
+    window.journeyEngine.unlockAchievement('grammar_guru');
+  }
 };
 
 function generateSampleStringsFromRules(rulesText) {
@@ -1053,7 +1104,19 @@ function renderConvStep() {
   if (next) { next.textContent = convStep === total - 1 ? '✓ Done' : 'Next →'; next.disabled = convStep === total - 1; }
 }
 
-window.convNext = () => { if (convStep < CONV_STEPS.length - 1) { convStep++; renderConvStep(); } };
+window.convNext = () => { 
+  if (convStep < CONV_STEPS.length - 1) { 
+    convStep++; 
+    renderConvStep(); 
+    if (window.journeyEngine) {
+      window.journeyEngine.recordActivity('conversion', 'builder');
+      if (convStep === CONV_STEPS.length - 1) {
+        window.journeyEngine.recordActivity('conversion', 'test');
+        window.journeyEngine.unlockAchievement('first_conversion');
+      }
+    }
+  } 
+};
 window.convPrev = () => { if (convStep > 0) { convStep--; renderConvStep(); } };
 
 // ====================================================
@@ -1156,6 +1219,12 @@ window.pumpSlider = function(yLen) {
       : `xy²z = "${pumped}" → ${aCount} a's ≠ ${bCount} b's → NOT in L ✗ Pumping Fails!`;
   }
   if (detail) detail.textContent = `x="${x}"  y="${y}"  z="${z}" | xy²z="${pumped}" | |xy|=${xLen+yLen}≤${p}✓ |y|=${yLen}≥1✓`;
+
+  if (window.journeyEngine) {
+    window.journeyEngine.recordActivity('pumping', 'builder');
+    window.journeyEngine.recordActivity('pumping', 'test');
+    window.journeyEngine.unlockAchievement('pumping_explorer');
+  }
 };
 
 // ====================================================
@@ -1544,6 +1613,9 @@ window.runSimulation = function() {
   cvSimTrace = buildSimTrace(str);
   cvSimStep = -1;
   renderSimResult(str);
+  if (window.journeyEngine) {
+    window.journeyEngine.recordActivity('dfa', 'test');
+  }
 };
 
 function buildSimTrace(str) {

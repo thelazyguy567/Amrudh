@@ -392,6 +392,12 @@ window.runRealMinimize = function() {
   }
 
   out.innerHTML = html;
+
+  if (window.journeyEngine) {
+    window.journeyEngine.recordActivity('minimization', 'builder');
+    window.journeyEngine.recordActivity('minimization', 'test');
+    window.journeyEngine.unlockAchievement('minimization_master');
+  }
 };
 
 window.applyMinimization = function() {
